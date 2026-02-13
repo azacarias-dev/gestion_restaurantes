@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
+import proveedoresRoutes from '../src/Proveedores/proveedores.routes.js';
 
 
 const BASE_URL = '/gestionRestaurantes/v1';
@@ -19,6 +20,8 @@ const middlewares = (app) => {
 
 const routes = (app) => {
     // Rutas de la aplicacion
+    app.use(`${BASE_URL}/proveedores`, proveedoresRoutes);
+
 }
 
 const initServer = async (app) => {
