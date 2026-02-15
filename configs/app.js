@@ -5,20 +5,26 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
-
+import usuarioRoutes from '../src/Usuarios/usuarios.routes.js';
+import pedidoRoutes from '../src/Pedidos/pedidos.routes.js';
+import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
+import platillosRoutes from '../src/Platillos/platillos.routes.js';
 
 const BASE_URL = '/gestionRestaurantes/v1';
 
 const middlewares = (app) => {
-    app.use(express.urlencoded({ extended: false, limit: '10mb'}));
-    app.use(express.json({limit: '10mb'}));
+    app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+    app.use(express.json({ limit: '10mb' }));
     app.use(cors(corsOptions));
     app.use(morgan('dev'));
 }
 
-
 const routes = (app) => {
     // Rutas de la aplicacion
+    app.use(`${BASE_URL}/usuarios`, usuarioRoutes);
+    app.use(`${BASE_URL}/pedidos`, pedidoRoutes);
+    app.use(`${BASE_URL}/reservaciones`, reservacionRoutes);
+    app.use(`${BASE_URL}/platillos`, platillosRoutes);
 }
 
 const initServer = async (app) => {
@@ -29,13 +35,13 @@ const initServer = async (app) => {
         dbConnection();
         middlewares(app);
         routes(app);
-        
+
         app.listen(PORT, () => {
             console.log(`Servidor corriendo en el puerto ${PORT}`);
             console.log(`Base URL: http://localhost:${PORT}${BASE_URL}`)
         });
 
-        app.get(`${BASE_URL}/health`, (req, res) => { 
+        app.get(`${BASE_URL}/health`, (req, res) => {
             res.status(200).json(
                 {
                     status: 'ok',
@@ -50,4 +56,4 @@ const initServer = async (app) => {
     }
 }
 
-export  { initServer };
+export { initServer };
