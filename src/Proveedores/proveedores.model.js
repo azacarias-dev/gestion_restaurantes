@@ -46,8 +46,6 @@ const proveedoresSchema = new mongoose.Schema({
     },
 })
 
-proveedoresSchema.index({ dpi: 1 }, { unique: true });
-proveedoresSchema.index({ correo: 1 }, { unique: true });
-proveedoresSchema.index({ isActive: 1, nombre: 1, apellido: 1 });
+proveedoresSchema.index({ isActive: 1 });
 
 export default mongoose.model('Proveedores', proveedoresSchema);

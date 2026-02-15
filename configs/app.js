@@ -26,7 +26,6 @@ const middlewares = (app) => {
 const routes = (app) => {
     // Rutas de la aplicacion
     app.use(`${BASE_URL}/proveedores`, proveedoresRoutes);
-
     app.use(`${BASE_URL}/empleados`, empleadosRoutes);
     app.use(`${BASE_URL}/usuarios`, usuarioRoutes);
     app.use(`${BASE_URL}/pedidos`, pedidoRoutes);
