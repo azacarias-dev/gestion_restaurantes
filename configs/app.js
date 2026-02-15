@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
+import proveedoresRoutes from '../src/Proveedores/proveedores.routes.js';
 import empleadosRoutes from '../src/Empleados/empleados.routes.js';
 
 import usuarioRoutes from '../src/Usuarios/usuarios.routes.js';
@@ -24,6 +25,8 @@ const middlewares = (app) => {
 
 const routes = (app) => {
     // Rutas de la aplicacion
+    app.use(`${BASE_URL}/proveedores`, proveedoresRoutes);
+
     app.use(`${BASE_URL}/empleados`, empleadosRoutes);
     app.use(`${BASE_URL}/usuarios`, usuarioRoutes);
     app.use(`${BASE_URL}/pedidos`, pedidoRoutes);
