@@ -9,11 +9,8 @@ export const createPedidoValidator = [
         .withMessage('Debe ser un ObjectId válido'),
 
     body('detalles')
-        .trim()
-        .notEmpty()
-        .withMessage('Los detalles son requeridos')
-        .isLength({ min: 5 })
-        .withMessage('Los detalles deben tener al menos 5 caracteres'),
+        .isArray({ min: 1 })
+        .withMessage('Los detalles deben ser un array con al menos un elemento'),
 
     checkValidators
 ];

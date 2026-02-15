@@ -1,13 +1,53 @@
 import Pedido from './pedidos.model.js';
+import Platillo from '../Platillos/platillos.model.js';
 
 // Crear pedido
 export const createPedido = async (req, res) => {
     try {
-        const pedido = new Pedido(req.body);
-        await pedido.save();
-        res.status(201).json({ success: true, message: 'Pedido creado', pedido });
+        const { usuario, detalles} = req.body;
+        let totalAcumulado = 0;
+        const detallesConPrecio = [];
+
+        for (const item of detalles) {
+            const platilloDB = await Platillo.findById(item.platilloId);
+
+            if (!platilloDB || !platilloDB.isActive) {
+                return res.status(404).json({
+                    success: false,
+                    message: `Platillo con ID ${item.platilloId} no encontrado o inactivo`
+                });
+            }
+
+            const subtotal = item.cantidad * platilloDB.precio;
+            totalAcumulado += subtotal;
+
+            detallesConPrecio.push({
+                platillo: item.platilloId,
+                cantidad: item.cantidad,
+                subtotal: subtotal
+            });
+        }
+
+        const nuevoPedido = new Pedido({
+            usuario,
+            detalles: detallesConPrecio,
+            total: totalAcumulado,
+            status: 'PENDIENTE'
+        });
+
+        await nuevoPedido.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'Pedido creado exitosamente',
+            pedido: nuevoPedido
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al crear pedido', error });
+        res.status(500).json({
+            success: false,
+            message: 'Error al crear pedido',
+            error: error.message
+        });
     }
 };
 
@@ -29,7 +69,7 @@ export const cancelPedido = async (req, res) => {
 // Obtener pedidos pendientes
 export const getPedidosPendientes = async (req, res) => {
     try {
-        const pedidos = await Pedido.find({ status: 'PENDIENTE' })
+        const pedidos = await Pedido.find({ status: 'COMPLETADO' })
             .populate('usuario', 'name surname email');
 
         res.status(200).json({

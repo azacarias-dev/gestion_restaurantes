@@ -8,6 +8,7 @@ import { dbConnection } from './db.js';
 import usuarioRoutes from '../src/Usuarios/usuarios.routes.js';
 import pedidoRoutes from '../src/Pedidos/pedidos.routes.js';
 import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
+import ventasRoutes from '../src/Ventas/ventas.routes.js';
 import platillosRoutes from '../src/Platillos/platillos.routes.js';
 
 const BASE_URL = '/gestionRestaurantes/v1';
@@ -25,6 +26,7 @@ const routes = (app) => {
     app.use(`${BASE_URL}/pedidos`, pedidoRoutes);
     app.use(`${BASE_URL}/reservaciones`, reservacionRoutes);
     app.use(`${BASE_URL}/platillos`, platillosRoutes);
+    app.use(`${BASE_URL}/ventas`, ventasRoutes);
 }
 
 const initServer = async (app) => {

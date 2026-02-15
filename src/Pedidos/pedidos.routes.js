@@ -18,7 +18,7 @@ const router = Router();
 router.post('/createPedido', createPedidoValidator, createPedido);
 
 // GET
-router.get('/pendientes', getPedidosPendientes);
+router.get('/', getPedidosPendientes);
 router.get('/:id', getPedidoByIdValidator, getPedidoById);
 
 // PUT

@@ -1,16 +1,34 @@
-'user strict';
+'use strict';
 
-import { Schema, model } from 'mongoose';
+import mongoose, {mongo} from "mongoose";
 
-const pedidoSchema = Schema({
+const pedidoSchema = new mongoose.Schema({
     usuario: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
     },
-    detalles: {
-        type: String,
-        required: true
+    detalles: [{
+        platillo: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Platillo',
+            required: true
+        },
+        cantidad: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        subtotal: {
+            type: Number,
+            required: true,
+            min: 0
+        }
+    }],
+    total: {
+        type: Number,
+        required: true,
+        min: 0
     },
     status: {
         type: String,
@@ -19,4 +37,4 @@ const pedidoSchema = Schema({
     }
 }, { timestamps: true });
 
-export default model('Pedido', pedidoSchema);
+export default mongoose.model('Pedido', pedidoSchema);

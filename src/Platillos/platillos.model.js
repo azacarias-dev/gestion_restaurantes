@@ -1,4 +1,4 @@
-'use streict';
+'use strict';
 
 import mongoose from "mongoose";
 
