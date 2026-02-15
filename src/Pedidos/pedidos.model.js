@@ -9,7 +9,7 @@ const pedidoSchema = Schema({
         required: true
     },
     detalles: {
-        type: String, 
+        type: String,
         required: true
     },
     status: {
