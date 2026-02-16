@@ -1,11 +1,15 @@
 import { Router } from 'express';
-import { createAccount, updateAccount } from './usuarios.controller.js';
+import { getUsers, getUserById, createAccount, updateAccount } from './usuarios.controller.js';
 import { createAccountValidator } from '../../middlewares/usuarios-validator.js';
 
 const router = Router();
 
-router.post('/createAccount', createAccountValidator, createAccount);
+router.get('/', getUsers);
 
-router.put('/updateAccount/:id', updateAccount);
+router.get('/:id', getUserById);
+
+router.post('/', createAccountValidator, createAccount);
+
+router.put('/:id', updateAccount);
 
 export default router;
