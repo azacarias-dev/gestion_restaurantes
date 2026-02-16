@@ -9,12 +9,12 @@ export const createPedido = async (req, res) => {
         const detallesConPrecio = [];
 
         for (const item of detalles) {
-            const platilloDB = await Platillo.findById(item.platilloId);
+            const platilloDB = await Platillo.findById(item.platillo);
 
             if (!platilloDB || !platilloDB.isActive) {
                 return res.status(404).json({
                     success: false,
-                    message: `Platillo con ID ${item.platilloId} no encontrado o inactivo`
+                    message: `Platillo con ID ${item.platillo} no encontrado o inactivo`
                 });
             }
 
@@ -22,7 +22,7 @@ export const createPedido = async (req, res) => {
             totalAcumulado += subtotal;
 
             detallesConPrecio.push({
-                platillo: item.platilloId,
+                platillo: item.platillo,
                 cantidad: item.cantidad,
                 subtotal: subtotal
             });
@@ -69,7 +69,7 @@ export const cancelPedido = async (req, res) => {
 // Obtener pedidos pendientes
 export const getPedidosPendientes = async (req, res) => {
     try {
-        const pedidos = await Pedido.find({ status: 'COMPLETADO' })
+        const pedidos = await Pedido.find({ status: 'PENDIENTE' })
             .populate('usuario', 'name surname email');
 
         res.status(200).json({
