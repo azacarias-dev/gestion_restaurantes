@@ -9,6 +9,34 @@ export const getEmpleados = async (req, res) => {
     }
 };
 
+export const getEmpleadoById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const empleado = await Empleado.findById(id);
+
+        if (!empleado) {
+            return res.status(404).json({
+                success: false,
+                message: 'Empleado no encontrado'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            empleado
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Error al buscar el empleado',
+            error: err.message
+        });
+    }
+};
+
+
 export const saveEmpleado = async (req, res) => {
     try {
         const data = req.body;

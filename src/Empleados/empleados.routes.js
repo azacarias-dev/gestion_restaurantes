@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { getEmpleados, saveEmpleado, updateEmpleado, deleteEmpleado } from './empleados.controller.js';
-import { saveEmpleadoValidator } from '../../middlewares/empleados-validator.js';
+import { getEmpleados, getEmpleadoById ,saveEmpleado, updateEmpleado, deleteEmpleado } from './empleados.controller.js';
+import { saveEmpleadoValidator, getEmpleadoByIdValidator } from '../../middlewares/empleados-validator.js';
 
 const routes = Router();
 
 routes.get('/', getEmpleados);
+
+routes.get('/:id', getEmpleadoById, getEmpleadoByIdValidator);
 
 routes.post('/', saveEmpleadoValidator, saveEmpleado);
 

@@ -24,6 +24,10 @@ const reservacionesSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    numero_mesas: {
+        type: Number,
+        required: true
+    },
 
     estado: {
         type: String,
