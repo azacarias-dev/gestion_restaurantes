@@ -8,7 +8,7 @@ export const saveEmpleadoValidator = [
     body('surname', 'El apellido es obligatorio')
     .notEmpty(),
 
-    body('dpi', 'El DPI debe ser valido')
+    body('dpi', 'El pdi debe ser valido')
     .isLength({ min: 13, max: 13 }),
 
     body('sueldo', 'El sueldo debe ser un numero')
@@ -18,7 +18,7 @@ export const saveEmpleadoValidator = [
 ];  
 
 export const getEmpleadoByIdValidator = [
-    body('id', 'No es un ID válido')
+    body('id', 'No es un id valido')
         .isMongoId(),
 
     checkValidators
