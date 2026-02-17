@@ -16,3 +16,10 @@ export const saveEmpleadoValidator = [
 
     checkValidators
 ];  
+
+export const getEmpleadoByIdValidator = [
+    body('id', 'No es un ID válido')
+        .isMongoId(),
+
+    checkValidators
+];
