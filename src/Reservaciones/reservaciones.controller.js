@@ -9,7 +9,7 @@ export const getReservations = async (req, res) => {
     try {
 
         const reservaciones = await Reservacion.find()
-            .populate('id_usuario', 'name email'); // 👈 AQUI
+            .populate('id_usuario', 'name email');
 
         res.status(200).json({
             success: true,
@@ -33,9 +33,8 @@ export const getReservations = async (req, res) => {
 export const createReservation = async (req, res) => {
     try {
 
-        const { id_usuario, fecha, hora, numero_personas } = req.body;
+        const { id_usuario, fecha, hora, numero_personas, numero_mesas } = req.body;
 
-        // 🔥 validar que usuario exista
         const usuario = await Usuario.findById(id_usuario);
 
         if (!usuario) {
@@ -45,12 +44,12 @@ export const createReservation = async (req, res) => {
             });
         }
 
-        // 🔥 crear reservación SOLO con el ID
         const nuevaReservacion = new Reservacion({
             id_usuario,
             fecha,
             hora,
-            numero_personas
+            numero_personas,
+            numero_mesas
         });
 
         await nuevaReservacion.save();

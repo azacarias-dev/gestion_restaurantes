@@ -30,6 +30,12 @@ export const validateCreateReservation = [
         .isInt({ min: 1 })
         .withMessage('Debe ser un número mayor a 0'),
 
+    body('numero_mesas')
+        .notEmpty()
+        .withMessage('Número de mesas obligatorio')
+        .isInt({ min: 1, max: 10 })
+        .withMessage('Debe ser un número entre 1 y 10'),
+
     body('estado')
         .optional()
         .isIn(['pendiente', 'confirmada', 'cancelada'])
@@ -61,6 +67,11 @@ export const validateUpdateReservation = [
         .optional()
         .isInt({ min: 1 })
         .withMessage('Debe ser un número mayor a 0'),
+
+    body('numero_mesas')
+        .optional()
+        .isInt({ min: 1, max: 10 })
+        .withMessage('Debe ser un número entre 1 y 10'),
 
     body('estado')
         .optional()
