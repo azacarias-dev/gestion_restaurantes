@@ -2,7 +2,7 @@ import Usuario from './usuarios.model.js';
 
 export const getUsers = async (req, res) => {
     try {
-        const usuarios = await Usuario.find({ isActive: true });
+        const usuarios = await Usuario.find(); //({ isActive: true })
 
         if (usuarios.length === 0) {
             return res.status(404).json({ success: false, message: 'No se encontraron usuarios' });
@@ -17,7 +17,7 @@ export const getUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const usuario = await Usuario.findById(id);
+        const usuario = await Usuario.findOne({ _id: id, isActive: true });
 
         if (!usuario) {
             return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
@@ -48,5 +48,30 @@ export const updateAccount = async (req, res) => {
         res.status(200).json({ success: true, message: 'Cuenta actualizada', usuario });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al actualizar', error });
+    }
+};
+
+export const deleteAccount = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Actualizamos el estado a false
+        const usuario = await Usuario.findByIdAndUpdate(
+            id, 
+            { isActive: false }, 
+            { new: true }
+        );
+
+        if (!usuario) {
+            return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: `El usuario ${usuario.name} ha sido desactivado con éxito`, 
+            usuario // Aquí verás en el JSON que isActive ahora es false
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al cambiar el estado', error });
     }
 };
