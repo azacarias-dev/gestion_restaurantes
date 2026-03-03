@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { checkValidators } from './check-validators.js';
 
 export const createAccountValidator = [
@@ -27,5 +27,10 @@ export const createPedidoValidator = [
     body('detalles', 'Los detalles del pedido son obligatorios')
     .notEmpty(),
 
+    checkValidators
+];
+
+export const deleteAccountValidator = [
+    param('id', 'No es un ID de MongoDB valido').isMongoId(),
     checkValidators
 ];
