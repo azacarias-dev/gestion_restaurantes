@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { crearVenta, getVentas, getVentaById } from "./ventas.controller.js";
-import { createVentaValidator, getVentaByIdValidator } from "../../middlewares/ventas-validators.js";
+import { getVentas, getVentaById, getVentasBySucursalYMes } from "./ventas.controller.js";
+import { getVentaByIdValidator } from "../../middlewares/ventas-validators.js";
 
 const router = Router();
 
-router.post('/', createVentaValidator, crearVenta);
 router.get('/', getVentas);
+
 router.get('/:id', getVentaByIdValidator, getVentaById);
+
+router.get('/sucursal/:idSucursal', getVentasBySucursalYMes);
+
 export default router;

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
     createPedido,
     cancelPedido,
-    getPedidosPendientes,
+    //getPedidosPendientes,
     getPedidoById
 } from './pedidos.controller.js';
 
@@ -18,7 +18,7 @@ const router = Router();
 router.post('/createPedido', createPedidoValidator, createPedido);
 
 // GET
-router.get('/', getPedidosPendientes);
+//router.get('/', getPedidosPendientes);
 router.get('/:id', getPedidoByIdValidator, getPedidoById);
 
 // PUT
