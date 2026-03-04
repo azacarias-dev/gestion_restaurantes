@@ -12,6 +12,7 @@ import usuarioRoutes from '../src/Usuarios/usuarios.routes.js';
 import pedidoRoutes from '../src/Pedidos/pedidos.routes.js';
 import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
 import ventasRoutes from '../src/Ventas/ventas.routes.js';
+import inventarioRoutes from '../src/Inventario/inventario.routes.js';
 import platillosRoutes from '../src/Platillos/platillos.routes.js';
 
 const BASE_URL = '/gestionRestaurantes/v1';
@@ -33,6 +34,7 @@ const routes = (app) => {
     app.use(`${BASE_URL}/platillos`, platillosRoutes);
     app.use(`${BASE_URL}/ventas`, ventasRoutes);
     app.use(`${BASE_URL}/sucursales`, sucursalRoutes);
+    app.use(`${BASE_URL}/inventarios`, inventarioRoutes);
 }
 
 const initServer = async (app) => {
