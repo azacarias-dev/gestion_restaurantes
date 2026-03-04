@@ -14,7 +14,7 @@ import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
 import ventasRoutes from '../src/Ventas/ventas.routes.js';
 import platillosRoutes from '../src/Platillos/platillos.routes.js';
 
-const BASE_URL = '/gestionRestaurantes/v1';
+const BASE_URL = '/gestionRestaurantes/v1/admin';
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false, limit: '10mb' }));
@@ -37,7 +37,7 @@ const routes = (app) => {
 
 const initServer = async (app) => {
     app = express();
-    const PORT = process.env.PORT || 3001;
+    const PORT = process.env.PORT || 3002;
 
     try {
         dbConnection();
@@ -53,7 +53,7 @@ const initServer = async (app) => {
             res.status(200).json(
                 {
                     status: 'ok',
-                    service: 'Gestion de restaurantes',
+                    service: 'Gestion de restaurantes Admin',
                     version: '1.0.0'
                 }
             );

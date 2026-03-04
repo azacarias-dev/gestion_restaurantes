@@ -12,7 +12,7 @@ import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
 import ventasRoutes from '../src/Ventas/ventas.routes.js';
 import platillosRoutes from '../src/Platillos/platillos.routes.js';
 
-const BASE_URL = '/gestionRestaurantes/v1';
+const BASE_URL = '/gestionRestaurantes/v1/usuario';
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false, limit: '10mb' }));
@@ -49,7 +49,7 @@ const initServer = async (app) => {
             res.status(200).json(
                 {
                     status: 'ok',
-                    service: 'Gestion de restaurantes',
+                    service: 'Gestion de restaurantes User',
                     version: '1.0.0'
                 }
             );
