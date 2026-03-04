@@ -4,7 +4,8 @@ import { createVentaValidator, getVentaByIdValidator } from "../../middlewares/v
 
 const router = Router();
 
-router.post('/', createVentaValidator, crearVenta);
 router.get('/', getVentas);
+
 router.get('/:id', getVentaByIdValidator, getVentaById);
+
 export default router;
