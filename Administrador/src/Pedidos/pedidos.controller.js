@@ -30,6 +30,7 @@ export const createPedido = async (req, res) => {
 
         const nuevoPedido = new Pedido({
             usuario,
+            sucursal,
             detalles: detallesConPrecio,
             total: totalAcumulado,
             status: 'PENDIENTE'
@@ -109,6 +110,30 @@ export const getPedidoById = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error al obtener pedido',
+            error: error.message
+        });
+    }
+};
+
+// Obtener pedidos por sucursal
+export const getPedidosBySucursal = async (req, res) => {
+    try {
+        const { sucursalId } = req.params;
+
+        const pedidos = await Pedido.find({ sucursal: sucursalId })
+            .populate('usuario', 'name surname email')
+            .populate('sucursal', 'nombre direccion');
+
+        res.status(200).json({
+            success: true,
+            total: pedidos.length,
+            pedidos
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener pedidos por sucursal',
             error: error.message
         });
     }
