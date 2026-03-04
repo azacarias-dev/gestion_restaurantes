@@ -4,7 +4,9 @@ import Platillo from '../Platillos/platillos.model.js';
 // Crear pedido
 export const createPedido = async (req, res) => {
     try {
-        const { usuario, detalles} = req.body;
+        // AGREGAMOS 'sucursal' AQUÍ:
+        const { usuario, sucursal, detalles } = req.body; 
+        
         let totalAcumulado = 0;
         const detallesConPrecio = [];
 
@@ -30,7 +32,7 @@ export const createPedido = async (req, res) => {
 
         const nuevoPedido = new Pedido({
             usuario,
-            sucursal,
+            sucursal, 
             detalles: detallesConPrecio,
             total: totalAcumulado,
             status: 'PENDIENTE'
