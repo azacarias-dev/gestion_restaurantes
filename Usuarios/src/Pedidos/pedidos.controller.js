@@ -30,6 +30,7 @@ export const createPedido = async (req, res) => {
 
         const nuevoPedido = new Pedido({
             usuario,
+            sucursal,
             detalles: detallesConPrecio,
             total: totalAcumulado,
             status: 'PENDIENTE'
