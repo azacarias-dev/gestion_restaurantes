@@ -7,7 +7,7 @@ import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
 import proveedoresRoutes from '../src/Proveedores/proveedores.routes.js';
 import empleadosRoutes from '../src/Empleados/empleados.routes.js';
-
+import sucursalRoutes from '../src/Sucursal/sucursal.routes.js';
 import usuarioRoutes from '../src/Usuarios/usuarios.routes.js';
 import pedidoRoutes from '../src/Pedidos/pedidos.routes.js';
 import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
@@ -32,6 +32,7 @@ const routes = (app) => {
     app.use(`${BASE_URL}/reservaciones`, reservacionRoutes);
     app.use(`${BASE_URL}/platillos`, platillosRoutes);
     app.use(`${BASE_URL}/ventas`, ventasRoutes);
+    app.use(`${BASE_URL}/sucursales`, sucursalRoutes);
 }
 
 const initServer = async (app) => {
