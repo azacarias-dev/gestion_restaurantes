@@ -51,28 +51,3 @@ export const crearVenta = async (req, res) => {
 
 
 
-export const getVentaById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const venta = await Venta.findById(id);
-
-        if (!venta) {
-            return res.status(404).json({
-                success: false,
-                message: 'Venta no encontrada'
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: 'Venta obtenida exitosamente',
-            data: venta
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error al obtener la venta',
-            error: error.message
-        });
-    }
-}

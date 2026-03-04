@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { crearVenta, getVentas, getVentaById } from "./ventas.controller.js";
+import { crearVenta, getVentas, getVentaById, getVentasBySucursalYMes } from "./ventas.controller.js";
 import { createVentaValidator, getVentaByIdValidator } from "../../middlewares/ventas-validators.js";
 
 const router = Router();
@@ -7,5 +7,7 @@ const router = Router();
 router.get('/', getVentas);
 
 router.get('/:id', getVentaByIdValidator, getVentaById);
+
+router.get('/sucursal/:idSucursal', getVentasBySucursalYMes);
 
 export default router;
