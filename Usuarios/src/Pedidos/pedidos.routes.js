@@ -3,7 +3,8 @@ import {
     createPedido,
     cancelPedido,
     //getPedidosPendientes,
-    getPedidoById
+    getPedidoById,
+    getPedidosByUser
 } from './pedidos.controller.js';
 
 import {
@@ -13,6 +14,8 @@ import {
 } from '../../middlewares/pedidos-validator.js';
 
 const router = Router();
+
+router.get('/usuario/:uid', getPedidosByUser);
 
 // POST
 router.post('/createPedido', createPedidoValidator, createPedido);

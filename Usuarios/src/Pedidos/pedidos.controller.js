@@ -1,5 +1,6 @@
 import Pedido from './pedidos.model.js';
 import Platillo from '../Platillos/platillos.model.js';
+import Sucursal from '../Sucursal/sucursal.model.js';
 
 // Crear pedido
 export const createPedido = async (req, res) => {
@@ -92,6 +93,43 @@ export const getPedidoById = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error al obtener pedido',
+            error: error.message
+        });
+    }
+};
+
+export const getPedidosByUser = async (req, res) => {
+    try {
+        const { uid } = req.params;
+
+        const pedidos = await Pedido.find({ usuario: uid })
+            .populate({
+                path: 'sucursal',
+                model: 'Sucursales', // Nombre exacto del export de sucursal
+                select: 'nombre direccion'
+            })
+            .populate({
+                path: 'detalles.platillo',
+                model: 'Platillos', // <--- AGREGAMOS LA "S" para que coincida con tu modelo
+                select: 'nombre precio'
+            });
+
+        if (pedidos.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Este usuario aún no tiene pedidos registrados'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            totalPedidos: pedidos.length,
+            pedidos
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener el historial de pedidos',
             error: error.message
         });
     }
