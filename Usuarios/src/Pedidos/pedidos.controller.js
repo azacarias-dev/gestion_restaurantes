@@ -5,9 +5,7 @@ import Sucursal from '../Sucursal/sucursal.model.js';
 // Crear pedido
 export const createPedido = async (req, res) => {
     try {
-        // AGREGAMOS 'sucursal' AQUÍ:
-        const { usuario, sucursal, detalles } = req.body; 
-        
+        const { usuario, detalles, sucursal } = req.body;
         let totalAcumulado = 0;
         const detallesConPrecio = [];
 
