@@ -1,31 +1,22 @@
 import Usuario from './usuarios.model.js';
 
-export const getUsers = async (req, res) => {
+export const getMyProfile = async (req, res) => {
     try {
-        const usuarios = await Usuario.find(); //({ isActive: true })
-
-        if (usuarios.length === 0) {
-            return res.status(404).json({ success: false, message: 'No se encontraron usuarios' });
+        const { id } = req.body; 
+        
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID de usuario requerido' });
         }
 
-        res.status(200).json({ success: true, total: usuarios.length, usuarios });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al obtener usuarios', error });
-    }
-};
-
-export const getUserById = async (req, res) => {
-    try {
-        const { id } = req.params;
         const usuario = await Usuario.findOne({ _id: id, isActive: true });
-
+        
         if (!usuario) {
-            return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            return res.status(404).json({ success: false, message: 'Usuario no encontrado o está inactivo' });
         }
 
         res.status(200).json({ success: true, usuario });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al obtener el usuario', error });
+        res.status(500).json({ success: false, message: 'Error al obtener el perfil', error: error.message });
     }
 };
 
@@ -42,20 +33,49 @@ export const createAccount = async (req, res) => {
 
 export const updateAccount = async (req, res) => {
     try {
-        const { id } = req.params;
-        const data = req.body;
+        const { id, ...data } = req.body; 
+
+        if (!id) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Se requiere el ID en el cuerpo de la solicitud para actualizar' 
+            });
+        }
+
         const usuario = await Usuario.findByIdAndUpdate(id, data, { new: true });
-        res.status(200).json({ success: true, message: 'Cuenta actualizada', usuario });
+
+        if (!usuario) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Usuario no encontrado' 
+            });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Cuenta actualizada exitosamente', 
+            usuario 
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al actualizar', error });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error al actualizar', 
+            error: error.message 
+        });
     }
 };
 
-export const deleteAccount = async (req, res) => {
+export const deactivateAccount = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.body;
 
-        // Actualizamos el estado a false
+        if (!id) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Se requiere el ID para desactivar la cuenta' 
+            });
+        }
+
         const usuario = await Usuario.findByIdAndUpdate(
             id, 
             { isActive: false }, 
@@ -63,15 +83,40 @@ export const deleteAccount = async (req, res) => {
         );
 
         if (!usuario) {
-            return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Usuario no encontrado' 
+            });
         }
 
         res.status(200).json({ 
             success: true, 
-            message: `El usuario ${usuario.name} ha sido desactivado con éxito`, 
-            usuario // Aquí verás en el JSON que isActive ahora es false
+            message: 'Cuenta desactivada correctamente', 
+            usuario 
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al cambiar el estado', error });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error al desactivar', 
+            error: error.message 
+        });
+    }
+};
+
+export const activateAccount = async (req, res) => {
+    try {
+        const { id } = req.body; 
+        
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID requerido para activar' });
+        }
+
+        const usuario = await Usuario.findByIdAndUpdate(id, { isActive: true }, { new: true });
+        
+        if (!usuario) return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+
+        res.status(200).json({ success: true, message: 'Cuenta activada de nuevo', usuario });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al activar', error: error.message });
     }
 };

@@ -3,7 +3,8 @@ import {
     createPedido,
     cancelPedido,
     getPedidosPendientes,
-    getPedidoById
+    getPedidoById,
+    getPedidosBySucursal
 } from './pedidos.controller.js';
 
 import {
@@ -23,5 +24,7 @@ router.get('/:id', getPedidoByIdValidator, getPedidoById);
 
 // PUT
 router.put('/cancelPedido/:id', cancelPedidoValidator, cancelPedido);
+
+router.get('/sucursal/:sucursalId', getPedidosBySucursal);
 
 export default router;

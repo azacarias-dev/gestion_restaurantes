@@ -59,12 +59,44 @@ export const updateEmpleado = async (req, res) => {
     }
 };
 
-export const deleteEmpleado = async (req, res) => {
+export const activateEmpleado = async (req, res) => {
     try {
         const { id } = req.params;
-        const empleado = await Empleado.findByIdAndUpdate(id, { status: false }, { new: true });
-        res.status(200).json({ success: true, message: 'Empleado desactivado', empleado });
+        const empleado = await Empleado.findByIdAndUpdate(
+            id, 
+            { status: true }, 
+            { new: true }
+        );
+
+        if (!empleado) return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
+
+        res.status(200).json({ 
+            success: true, 
+            message: `El empleado ${empleado.name} ha sido activado`, 
+            empleado 
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al eliminar', error });
+        res.status(500).json({ success: false, message: 'Error al activar empleado', error });
+    }
+};
+
+export const deactivateEmpleado = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const empleado = await Empleado.findByIdAndUpdate(
+            id, 
+            { status: false }, 
+            { new: true }
+        );
+
+        if (!empleado) return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
+
+        res.status(200).json({ 
+            success: true, 
+            message: `El empleado ${empleado.name} ha sido desactivado`, 
+            empleado 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al desactivar empleado', error });
     }
 };

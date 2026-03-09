@@ -7,14 +7,16 @@ import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
 import proveedoresRoutes from '../src/Proveedores/proveedores.routes.js';
 import empleadosRoutes from '../src/Empleados/empleados.routes.js';
-
+import sucursalRoutes from '../src/Sucursal/sucursal.routes.js';
 import usuarioRoutes from '../src/Usuarios/usuarios.routes.js';
 import pedidoRoutes from '../src/Pedidos/pedidos.routes.js';
 import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
 import ventasRoutes from '../src/Ventas/ventas.routes.js';
+import inventarioRoutes from '../src/Inventario/inventario.routes.js';
 import platillosRoutes from '../src/Platillos/platillos.routes.js';
+import mesasRoutes from '../src/Mesas/mesas.routes.js';
 
-const BASE_URL = '/gestionRestaurantes/v1';
+const BASE_URL = '/gestionRestaurantes/v1/admin';
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false, limit: '10mb' }));
@@ -32,11 +34,14 @@ const routes = (app) => {
     app.use(`${BASE_URL}/reservaciones`, reservacionRoutes);
     app.use(`${BASE_URL}/platillos`, platillosRoutes);
     app.use(`${BASE_URL}/ventas`, ventasRoutes);
+    app.use(`${BASE_URL}/sucursales`, sucursalRoutes);
+    app.use(`${BASE_URL}/inventarios`, inventarioRoutes);
+    app.use(`${BASE_URL}/mesas`, mesasRoutes);
 }
 
 const initServer = async (app) => {
     app = express();
-    const PORT = process.env.PORT || 3001;
+    const PORT = process.env.PORT || 3002;
 
     try {
         dbConnection();
@@ -52,7 +57,7 @@ const initServer = async (app) => {
             res.status(200).json(
                 {
                     status: 'ok',
-                    service: 'Gestion de restaurantes',
+                    service: 'Gestion de restaurantes Admin',
                     version: '1.0.0'
                 }
             );
