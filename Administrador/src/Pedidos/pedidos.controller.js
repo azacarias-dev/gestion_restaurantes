@@ -4,7 +4,7 @@ import Platillo from '../Platillos/platillos.model.js';
 // Crear pedido
 export const createPedido = async (req, res) => {
     try {
-        const { usuario, detalles} = req.body;
+        const { usuario, sucursal, detalles } = req.body;
         let totalAcumulado = 0;
         const detallesConPrecio = [];
 
@@ -67,10 +67,24 @@ export const cancelPedido = async (req, res) => {
     }
 };
 
+export const completadoPedido = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const pedido = await Pedido.findByIdAndUpdate(
+            id,
+            { status: 'COMPLETADO' },
+            { new: true }
+        );
+        res.status(200).json({ success: true, message: 'Pedido completado', pedido });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al completar', error });
+    }
+};
+
 // Obtener pedidos pendientes
 export const getPedidosPendientes = async (req, res) => {
     try {
-        const pedidos = await Pedido.find({ status: 'PENDIENTE' })
+        const pedidos = await Pedido.find({ status: { $in: ['PENDIENTE', 'COMPLETADO', 'CANCELADO'] } })
             .populate('usuario', 'name surname email');
 
         res.status(200).json({
@@ -134,6 +148,38 @@ export const getPedidosBySucursal = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error al obtener pedidos por sucursal',
+            error: error.message
+        });
+    }
+};
+
+// Obtener pedidos por estado (PENDIENTE, COMPLETADO, CANCELADO)
+export const getPedidosByStatus = async (req, res) => {
+    try {
+        const { status } = req.params; // Se espera: "PENDIENTE", "COMPLETADO", "CANCELADO"
+
+        // Validar que el status sea válido
+        const estadosValidos = ['PENDIENTE', 'COMPLETADO', 'CANCELADO'];
+        if (!estadosValidos.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: `Estado inválido. Los estados válidos son: ${estadosValidos.join(', ')}`
+            });
+        }
+
+        const pedidos = await Pedido.find({ status })
+            .populate('usuario', 'name surname email')
+            .populate('sucursal', 'nombre direccion');
+
+        res.status(200).json({
+            success: true,
+            total: pedidos.length,
+            pedidos
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener pedidos por estado',
             error: error.message
         });
     }
