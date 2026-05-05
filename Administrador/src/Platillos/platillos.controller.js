@@ -80,7 +80,7 @@ export const createPlatillo = async (req, res) => {
       platilloData.photo = `${relativePath}.${extension}`;
     } else {
       // Si no se envía archivo, usar imagen por defecto
-      platilloData.photo = 'fields/pasto_kinaliani_e1j0l2';
+      platilloData.photo = 'platillos/plato_kinaliani_nyvxo5';
     }
 
     const platillo = new Platillos(platilloData);
