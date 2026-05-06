@@ -2,8 +2,9 @@ import { Router } from 'express';
 import {
     createPedido,
     cancelPedido,
-    getPedidosPendientes,
-    getPedidoById
+    //getPedidosPendientes,
+    getPedidoById,
+    getPedidosByUser
 } from './pedidos.controller.js';
 
 import {
@@ -14,11 +15,13 @@ import {
 
 const router = Router();
 
+router.get('/usuario/:uid', getPedidosByUser);
+
 // POST
 router.post('/createPedido', createPedidoValidator, createPedido);
 
 // GET
-router.get('/', getPedidosPendientes);
+//router.get('/', getPedidosPendientes);
 router.get('/:id', getPedidoByIdValidator, getPedidoById);
 
 // PUT

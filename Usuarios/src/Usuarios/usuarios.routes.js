@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { getUsers, getUserById, createAccount, updateAccount, deleteAccount } from './usuarios.controller.js';
-import { createAccountValidator, deleteAccountValidator } from '../../middlewares/usuarios-validator.js';
+import { getMyProfile, createAccount, updateAccount, deactivateAccount, activateAccount } from './usuarios.controller.js';
+import { createAccountValidator } from '../../middlewares/usuarios-validator.js';
 
 const router = Router();
 
-router.get('/', getUsers);
+router.get('/profile', getMyProfile); 
 
-router.get('/:id', getUserById);
+router.post('/register', createAccountValidator, createAccount); 
 
-router.post('/', createAccountValidator, createAccount);
+router.put('/update', updateAccount); 
 
-router.put('/:id', updateAccount);
+router.put('/deactivate', deactivateAccount); 
 
-router.delete('/:id', deleteAccountValidator, deleteAccount);
+router.put('/activate', activateAccount); 
 
 export default router;

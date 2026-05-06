@@ -39,29 +39,4 @@ export const getPlatillos = async (req, res) => {
   }
 };
 
-// Obtener platillo por ID
-export const getPlatilloById = async (req, res) => {
-  try {
-    const { id } = req.params;
 
-    const platillo = await Platillos.findById(id);
-
-    if (!platillo) {
-      return res.status(404).json({
-        success: false,
-        message: 'Platillo no encontrado',
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: platillo,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al obtener el platillo',
-      error: error.message,
-    });
-  }
-};

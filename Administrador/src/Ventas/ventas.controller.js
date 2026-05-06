@@ -1,49 +1,47 @@
 import Venta from './ventas.model.js';
 import Pedido from '../Pedidos/pedidos.model.js';
 
-export const crearVenta = async (req, res) => {
+export const getVentasBySucursalYMes = async (req, res) => {
     try {
-        const { pedidoId, metodoPago } = req.body;
+        const { idSucursal } = req.params;
+        const { mes, anio } = req.query; // Ejemplo: /.../idSucursal?mes=3&anio=2026
 
-        const pedido = await Pedido.findById(pedidoId);
-
-        if (!pedido) {
-            return res.status(500).json({ success: false, message: 'Pedido no encontrado' });
-        }
-        
-        if (pedido.status === 'COMPLETADO') {
-            return res.status(500).json({ 
-                success: false,
-                message: 'El pedido ya está completado' });
+        if (!mes || !anio) {
+            return res.status(400).json({ success: false, message: 'El mes y el año son obligatorios en la query' });
         }
 
-        if (pedido.status === 'CANCELADO') {
-            return res.status(500).json({ 
-                success: false,
-                message: 'No se puede crear una venta para un pedido cancelado' });
-        }
-        
-        const totalVenta = pedido.total;
+        const fechaInicio = new Date(anio, mes - 1, 1);
+        const fechaFin = new Date(anio, mes, 0, 23, 59, 59);
 
-        const nuevaVenta = new Venta({
-            pedido: pedidoId,
-            total: totalVenta,
-            metodoPago
+        const ventas = await Venta.find({
+            fecha: { $gte: fechaInicio, $lte: fechaFin }
+        }).populate({
+            path: 'pedido',
+            match: { sucursal: idSucursal } 
         });
 
-        await nuevaVenta.save();
-        pedido.status = 'COMPLETADO';
-        await pedido.save();
+        const ventasFiltradas = ventas.filter(venta => venta.pedido !== null);
 
-        res.status(200).json({ 
-            success: true,
-            message: 'Venta creada exitosamente',
-            data: nuevaVenta 
+        if (ventasFiltradas.length === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'No se encontraron ventas para esta sucursal en el periodo indicado' 
             });
+        }
+
+        res.status(200).json({
+            success: true,
+            total: ventasFiltradas.length,
+            sucursal: idSucursal,
+            mes,
+            anio,
+            data: ventasFiltradas
+        });
+
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
-            message: 'Error al crear la venta',
+            message: 'Error al obtener el reporte de ventas',
             error: error.message
         });
     }

@@ -11,8 +11,9 @@ import sucursalRoutes from '../src/Sucursal/sucursal.routes.js';
 import reservacionRoutes from '../src/Reservaciones/reservaciones.routes.js';
 import ventasRoutes from '../src/Ventas/ventas.routes.js';
 import platillosRoutes from '../src/Platillos/platillos.routes.js';
+import mesasRoutes from '../src/Mesas/mesas.routes.js';
 
-const BASE_URL = '/gestionRestaurantes/v1';
+const BASE_URL = '/gestionRestaurantes/v1/usuario';
 
 const middlewares = (app) => {
     app.use(express.urlencoded({ extended: false, limit: '10mb' }));
@@ -29,6 +30,7 @@ const routes = (app) => {
     app.use(`${BASE_URL}/platillos`, platillosRoutes);
     app.use(`${BASE_URL}/ventas`, ventasRoutes);
     app.use(`${BASE_URL}/sucursales`, sucursalRoutes);
+    app.use(`${BASE_URL}/mesas`, mesasRoutes);
 }
 
 const initServer = async (app) => {
@@ -49,7 +51,7 @@ const initServer = async (app) => {
             res.status(200).json(
                 {
                     status: 'ok',
-                    service: 'Gestion de restaurantes',
+                    service: 'Gestion de restaurantes User',
                     version: '1.0.0'
                 }
             );

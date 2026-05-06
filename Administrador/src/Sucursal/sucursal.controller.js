@@ -51,9 +51,9 @@ export const getSucursales = async (req, res) => {
       ...sucursal._doc,
       estado: sucursal.horario
         ? obtenerEstadoSucursal(
-            sucursal.horario.apertura,
-            sucursal.horario.cierre
-          )
+          sucursal.horario.apertura,
+          sucursal.horario.cierre
+        )
         : "Horario no definido",
     }));
 
@@ -95,9 +95,9 @@ export const getSucursalById = async (req, res) => {
       ...sucursal._doc,
       estado: sucursal.horario
         ? obtenerEstadoSucursal(
-            sucursal.horario.apertura,
-            sucursal.horario.cierre
-          )
+          sucursal.horario.apertura,
+          sucursal.horario.cierre
+        )
         : "Horario no definido",
     };
 
@@ -118,7 +118,20 @@ export const getSucursalById = async (req, res) => {
 // Crear nueva sucursal
 export const createSucursal = async (req, res) => {
   try {
-    const sucursal = new Sucursales(req.body);
+    const sucursalData = req.body;
+
+    if (req.file) {
+      const extension = req.file.path.split('.').pop();
+      const filename = req.file.filename;
+      const relativePath = filename.substring(filename.indexOf('sucursales/'));
+
+      sucursalData.photo = `${relativePath}.${extension}`;
+    } else {
+      // Si no se envía archivo, usar imagen por defecto
+      sucursalData.photo = 'sucursales/plato_kinaliani_nyvxo5';
+    }
+
+    const sucursal = new Sucursales(sucursalData);
     await sucursal.save();
 
     res.status(201).json({
@@ -140,10 +153,39 @@ export const createSucursal = async (req, res) => {
 export const updateSucursal = async (req, res) => {
   try {
     const { id } = req.params;
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      const currentSucursal = await Sucursales.findById(id);
+
+      if (currentSucursal && currentSucursal.photo) {
+        const photoPath = currentSucursal.photo;
+        const photoWithoutExt = photoPath.substring(
+          0,
+          photoPath.lastIndexOf('.')
+        );
+        const publicId = `Gestion_Restaurantes/${photoWithoutExt}`;
+
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch (deleteError) {
+          console.error(
+            `Error al eliminar imagen anterior de Cloudinary: ${deleteError.message}`
+          );
+        }
+      }
+
+      const extension = req.file.path.split('.').pop();
+      const filename = req.file.filename;
+      const relativePath = filename.includes('sucursales/')
+        ? filename.substring(filename.indexOf('sucursales/'))
+        : filename;
+      updateData.photo = `${relativePath}.${extension}`;
+    }
 
     const sucursal = await Sucursales.findByIdAndUpdate(
       id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 

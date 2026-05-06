@@ -12,6 +12,8 @@ import {
     validateSucursalStatusChange,
     validateGetSucursalById,
 } from '../../middlewares/sucursal-validators.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
+import { uploadSucursalImage } from '../../middlewares/file-uploader.js';
 
 const router = Router();
 
@@ -22,6 +24,8 @@ router.get('/:id', validateGetSucursalById, getSucursalById);
 // Rutas POST
 router.post(
     '/',
+    validateJWT,
+    uploadSucursalImage.single('image'),
     validateCreateSucursal,
     createSucursal
 );
@@ -29,6 +33,8 @@ router.post(
 // Rutas PUT - actualizar sucursal
 router.put(
     '/:id',
+    validateJWT,
+    uploadSucursalImage.single('image'),
     validateUpdateSucursalRequest,
     updateSucursal
 );

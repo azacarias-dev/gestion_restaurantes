@@ -1,7 +1,8 @@
 'use strict'
 
 import { Router } from 'express';
-import { getReservations, getReservationById, createReservation, updateReservation, changeReservationStatus } from './reservaciones.controller.js';
+import { //getReservations,
+         getReservationById, createReservation, updateReservation, changeReservationStatus, getReservationsByUser } from './reservaciones.controller.js';
 import { validateCreateReservation, validateUpdateReservation, validateReservationStatusChange, validateGetReservationById } from '../../middlewares/reservation-validation.js';
 
 const router = Router();
@@ -28,6 +29,10 @@ router.put('/:id/cancelar',
     },
     validateReservationStatusChange,
     changeReservationStatus
+);
+
+router.get('/usuario/:uid', 
+    getReservationsByUser
 );
 
 export default router;

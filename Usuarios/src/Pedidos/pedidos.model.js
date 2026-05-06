@@ -8,10 +8,15 @@ const pedidoSchema = new mongoose.Schema({
         ref: 'Usuario',
         required: true
     },
+    sucursal: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Sucursal',
+        required: true
+    },
     detalles: [{
         platillo: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Platillo',
+            ref: 'Platillos',
             required: true
         },
         cantidad: {

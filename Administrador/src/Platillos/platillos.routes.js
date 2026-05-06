@@ -12,6 +12,8 @@ import {
     validatePlatilloStatusChange,
     validateGetPlatilloById,
 } from '../../middlewares/platillos-validators.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
+import { uploadPlatillosImage } from '../../middlewares/file-uploader.js';
 
 const router = Router();
 
@@ -22,6 +24,8 @@ router.get('/:id', validateGetPlatilloById, getPlatilloById);
 // Rutas POST
 router.post(
     '/',
+    validateJWT,
+    uploadPlatillosImage.single('image'),
     validateCreatePlatillo,
     createPlatillo
 );
@@ -29,6 +33,8 @@ router.post(
 // Rutas PUT - actualizar platillo
 router.put(
     '/:id',
+    validateJWT,
+    uploadPlatillosImage.single('image'),
     validateUpdatePlatilloRequest,
     updatePlatillo
 );

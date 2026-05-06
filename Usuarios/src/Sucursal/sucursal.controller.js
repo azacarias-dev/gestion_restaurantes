@@ -57,3 +57,37 @@ export const getSucursalById = async (req, res) => {
     });
   }
 };
+
+export const getSucursales = async (req, res) => {
+    try {
+        // Buscamos solo las que están activas
+        const sucursales = await Sucursales.find({ isActive: true });
+
+        if (sucursales.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No hay sucursales disponibles por el momento',
+            });
+        }
+
+        // Mapeamos para agregar el estado dinámico (Abierto/Cerrado) a cada una
+        const sucursalesConEstado = sucursales.map(sucursal => ({
+            ...sucursal._doc,
+            estado: sucursal.horario
+                ? obtenerEstadoSucursal(sucursal.horario.apertura, sucursal.horario.cierre)
+                : "Horario no definido",
+        }));
+
+        res.status(200).json({
+            success: true,
+            total: sucursalesConEstado.length,
+            data: sucursalesConEstado,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener la lista de sucursales',
+            error: error.message,
+        });
+    }
+};

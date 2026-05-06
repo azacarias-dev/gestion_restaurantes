@@ -1,4 +1,5 @@
 import Platillos from './platillos.model.js';
+import { cloudinary } from '../../middlewares/file-uploader.js';
 
 // Obtener todos los platillos con paginación y filtros
 export const getPlatillos = async (req, res) => {
@@ -71,6 +72,17 @@ export const createPlatillo = async (req, res) => {
   try {
     const platilloData = req.body;
 
+    if (req.file) {
+      const extension = req.file.path.split('.').pop();
+      const filename = req.file.filename;
+      const relativePath = filename.substring(filename.indexOf('fields/'));
+
+      platilloData.photo = `${relativePath}.${extension}`;
+    } else {
+      // Si no se envía archivo, usar imagen por defecto
+      platilloData.photo = 'platillos/plato_kinaliani_nyvxo5';
+    }
+
     const platillo = new Platillos(platilloData);
     await platillo.save();
 
@@ -93,6 +105,34 @@ export const updatePlatillo = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
+
+    if (req.file) {
+      const currentPlatillo = await Platillos.findById(id);
+
+      if (currentPlatillo && currentPlatillo.photo) {
+        const photoPath = currentPlatillo.photo;
+        const photoWithoutExt = photoPath.substring(
+          0,
+          photoPath.lastIndexOf('.')
+        );
+        const publicId = `PASTO_KINALIANI/${photoWithoutExt}`;
+
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch (deleteError) {
+          console.error(
+            `Error al eliminar imagen anterior de Cloudinary: ${deleteError.message}`
+          );
+        }
+      }
+
+      const extension = req.file.path.split('.').pop();
+      const filename = req.file.filename;
+      const relativePath = filename.includes('platillos/')
+        ? filename.substring(filename.indexOf('platillos/'))
+        : filename;
+      updateData.photo = `${relativePath}.${extension}`;
+    }
 
     const platillo = await Platillos.findByIdAndUpdate(id, updateData, {
       new: true,
