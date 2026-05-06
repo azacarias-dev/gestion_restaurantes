@@ -4,13 +4,13 @@ export const getEmpleados = async (req, res) => {
     try {
         // Solo buscamos los que tengan status true
         const empleados = await Empleado.find({ status: true });
-        
+
         console.log("Empleados Activos en DB:", empleados.length);
-        
-        res.status(200).json({ 
-            success: true, 
-            total: empleados.length, 
-            empleados 
+
+        res.status(200).json({
+            success: true,
+            total: empleados.length,
+            empleados
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error', error });
@@ -71,17 +71,17 @@ export const activateEmpleado = async (req, res) => {
     try {
         const { id } = req.params;
         const empleado = await Empleado.findByIdAndUpdate(
-            id, 
-            { status: true }, 
+            id,
+            { status: true },
             { new: true }
         );
 
         if (!empleado) return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
 
-        res.status(200).json({ 
-            success: true, 
-            message: `El empleado ${empleado.name} ha sido activado`, 
-            empleado 
+        res.status(200).json({
+            success: true,
+            message: `El empleado ${empleado.name} ha sido activado`,
+            empleado
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al activar empleado', error });
@@ -92,17 +92,17 @@ export const deactivateEmpleado = async (req, res) => {
     try {
         const { id } = req.params;
         const empleado = await Empleado.findByIdAndUpdate(
-            id, 
-            { status: false }, 
+            id,
+            { status: false },
             { new: true }
         );
 
         if (!empleado) return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
 
-        res.status(200).json({ 
-            success: true, 
-            message: `El empleado ${empleado.name} ha sido desactivado`, 
-            empleado 
+        res.status(200).json({
+            success: true,
+            message: `El empleado ${empleado.name} ha sido desactivado`,
+            empleado
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al desactivar empleado', error });
