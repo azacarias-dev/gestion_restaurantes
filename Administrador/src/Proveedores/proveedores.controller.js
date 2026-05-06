@@ -1,11 +1,12 @@
 import Proveedores from './proveedores.model.js';
 
-// Obtener todos los proveedores con paginación y filtros
 export const getProveedores = async (req, res) => {
   try {
-    const { page = 1, limit = 10, isActive = true } = req.query;
-
-    const filter = { isActive };
+    const { page = 1, limit = 10, isActive } = req.query;
+    const filter = {};
+        if (isActive !== undefined) {
+      filter.isActive = isActive === 'true'; 
+    }
 
     const options = {
       page: parseInt(page),
@@ -24,10 +25,10 @@ export const getProveedores = async (req, res) => {
       success: true,
       data: proveedores,
       pagination: {
-        currentPage: page,
+        currentPage: parseInt(page),
         totalPages: Math.ceil(total / limit),
         totalRecords: total,
-        limit,
+        limit: parseInt(limit),
       },
     });
   } catch (error) {
