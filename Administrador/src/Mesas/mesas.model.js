@@ -16,11 +16,6 @@ const mesaSchema = Schema({
         ref: 'Sucursales', 
         required: [true, 'La sucursal es obligatoria']
     },
-    empleado: {
-        type: Schema.Types.ObjectId,
-        ref: 'Empleado',
-        required: false
-    },
     isAvailable: { 
         type: Boolean,
         default: true

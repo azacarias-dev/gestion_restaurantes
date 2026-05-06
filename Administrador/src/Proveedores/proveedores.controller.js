@@ -2,7 +2,7 @@ import Proveedores from './proveedores.model.js';
 
 export const getProveedores = async (req, res) => {
   try {
-    const { page = 1, limit = 10, isActive } = req.query;
+    const { page = 1, limit = 100, isActive } = req.query;
     const filter = {};
         if (isActive !== undefined) {
       filter.isActive = isActive === 'true'; 
