@@ -2,10 +2,18 @@ import Empleado from './empleados.model.js';
 
 export const getEmpleados = async (req, res) => {
     try {
+        // Solo buscamos los que tengan status true
         const empleados = await Empleado.find({ status: true });
-        res.status(200).json({ success: true, total: empleados.length, empleados });
+        
+        console.log("Empleados Activos en DB:", empleados.length);
+        
+        res.status(200).json({ 
+            success: true, 
+            total: empleados.length, 
+            empleados 
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al obtener empleados', error });
+        res.status(500).json({ success: false, message: 'Error', error });
     }
 };
 
