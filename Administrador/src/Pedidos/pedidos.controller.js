@@ -4,7 +4,7 @@ import Platillo from '../Platillos/platillos.model.js';
 // Crear pedido
 export const createPedido = async (req, res) => {
     try {
-        const { usuario, detalles} = req.body;
+        const { usuario, detalles } = req.body;
         let totalAcumulado = 0;
         const detallesConPrecio = [];
 
@@ -64,6 +64,20 @@ export const cancelPedido = async (req, res) => {
         res.status(200).json({ success: true, message: 'Pedido cancelado', pedido });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al cancelar', error });
+    }
+};
+
+export const completPedido = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const pedido = await Pedido.findByIdAndUpdate(
+            id,
+            { status: 'COMPLETADO' },
+            { new: true }
+        );
+        res.status(200).json({ success: true, message: 'Pedido completado', pedido });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al completar', error });
     }
 };
 

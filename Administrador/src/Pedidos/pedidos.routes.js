@@ -4,13 +4,15 @@ import {
     cancelPedido,
     getPedidosPendientes,
     getPedidoById,
+    completPedido,
     getPedidosBySucursal
 } from './pedidos.controller.js';
 
 import {
     createPedidoValidator,
     getPedidoByIdValidator,
-    cancelPedidoValidator
+    cancelPedidoValidator,
+    completPedidoValidator
 } from '../../middlewares/pedidos-validator.js';
 
 const router = Router();
@@ -24,6 +26,7 @@ router.get('/:id', getPedidoByIdValidator, getPedidoById);
 
 // PUT
 router.put('/cancelPedido/:id', cancelPedidoValidator, cancelPedido);
+router.put('/completPedido/:id', completPedidoValidator, completPedido);
 
 router.get('/sucursal/:sucursalId', getPedidosBySucursal);
 
