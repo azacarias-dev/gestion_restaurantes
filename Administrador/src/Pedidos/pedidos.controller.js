@@ -4,7 +4,7 @@ import Platillo from '../Platillos/platillos.model.js';
 // Crear pedido
 export const createPedido = async (req, res) => {
     try {
-        const { usuario, detalles } = req.body;
+        const { usuario, detalles, sucursal } = req.body;
         let totalAcumulado = 0;
         const detallesConPrecio = [];
 
@@ -84,7 +84,7 @@ export const completPedido = async (req, res) => {
 // Obtener pedidos pendientes
 export const getPedidosPendientes = async (req, res) => {
     try {
-        const pedidos = await Pedido.find({ status: 'PENDIENTE' })
+        const pedidos = await Pedido.find({ status: { $in: ['PENDIENTE', 'COMPLETADO', 'CANCELADO'] } })
             .populate('usuario', 'name surname email');
 
         res.status(200).json({
