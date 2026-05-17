@@ -28,6 +28,8 @@ router.get('/:id', getPedidoByIdValidator, getPedidoById);
 router.put('/cancelPedido/:id', cancelPedidoValidator, cancelPedido);
 router.put('/completPedido/:id', completPedidoValidator, completPedido);
 
+// GET
+router.get('/status/:status', getPedidosByStatusValidator, getPedidosByStatus);
 router.get('/sucursal/:sucursalId', getPedidosBySucursal);
 
 export default router;

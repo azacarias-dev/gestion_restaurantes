@@ -152,3 +152,35 @@ export const getPedidosBySucursal = async (req, res) => {
         });
     }
 };
+
+// Obtener pedidos por estado (PENDIENTE, COMPLETADO, CANCELADO)
+export const getPedidosByStatus = async (req, res) => {
+    try {
+        const { status } = req.params; // Se espera: "PENDIENTE", "COMPLETADO", "CANCELADO"
+
+        // Validar que el status sea válido
+        const estadosValidos = ['PENDIENTE', 'COMPLETADO', 'CANCELADO'];
+        if (!estadosValidos.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: `Estado inválido. Los estados válidos son: ${estadosValidos.join(', ')}`
+            });
+        }
+
+        const pedidos = await Pedido.find({ status })
+            .populate('usuario', 'name surname email')
+            .populate('sucursal', 'nombre direccion');
+
+        res.status(200).json({
+            success: true,
+            total: pedidos.length,
+            pedidos
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener pedidos por estado',
+            error: error.message
+        });
+    }
+};

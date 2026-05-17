@@ -23,6 +23,16 @@ export const getPedidoByIdValidator = [
     checkValidators
 ];
 
+export const getPedidosByStatusValidator = [
+    param('status')
+        .notEmpty()
+        .withMessage('El estado es requerido')
+        .isIn(['PENDIENTE', 'COMPLETADO', 'CANCELADO'])
+        .withMessage('Estado inválido'),
+
+    checkValidators
+];
+
 export const cancelPedidoValidator = [
     param('id')
         .isMongoId()
